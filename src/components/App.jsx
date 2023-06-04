@@ -1,50 +1,81 @@
 import React from 'react';
 import Searchbar from './Searchbar/Searchbar';
-import axios from 'axios';
+import { pixabayApi } from './static/Api'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const KEY = '35692508-ed297a5167f9400201d2ec2b1';
+
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      data: [],
-      page: 1,
-      isLoading: false,
-      isShowButton: false,
-      error: null,
-    };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
   
-
-  async handleSubmit(e) {
-    e.preventDefault();
-    const { data } = await axios.get(
-      `https://pixabay.com/api/?q=${this.state.name}&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-    );
-    this.setState({ data });
-    this.setState({ name: '' });
+  state = {
+    name: '',
+    images: null,
+    data: [],
+    page: 1,
+    isLoading: false,
+    isShowButton: false,
+    error: null,
   }
 
-  async componentDidMount() {
-    try {
-      const { data } = await axios.get(
-        `https://pixabay.com/api/?q=cat&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-      );
-      this.setState({ data });
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+   async componentDidUpdate(prevProps, prevState) {
+    const { name, page } = this.state;
+    const prevPage = prevState.page;
+    const prevName = prevState.name;
+    const prevImages = prevState.images;
+
+    if (prevName !== name || prevPage !== page) {
+      try {
+        this.setState({ isLoading: true });
+
+        const { totalHits, hits } = await pixabayApi(name, page);
+
+        if (totalHits === 0) {
+          toast.error(`Sorry, there are no pictures on request ${name}`);
+          this.setState({ isLoading: false, isShowLoadMore: false });
+          return;
+        } else {
+          this.setState(prevState => ({
+            images: page === 1 ? hits : [...prevImages, ...hits],
+            isShowLoadMore: page < Math.ceil(totalHits / 12),
+          }));
+
+          this.setState({ isLoading: false });
+        }
+      } catch (error) {
+        toast.error(`${error}`);
+      }
     }
   }
 
+  handleSubmit = name => {
+    name.preventDefault();
+    this.setState({ name, page: 1, images: null });
+  };
+
+  handleLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+  };
+
+
   render() {
+    
     return (
       <div>
         <div>I am App</div>
+
         <Searchbar onSubmit={this.handleSubmit} />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </div>
     );
   }

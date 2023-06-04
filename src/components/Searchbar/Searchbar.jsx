@@ -2,8 +2,27 @@ import React from 'react';
 import css from './Searchbar.module.css';
 
 class Searchbar extends React.Component {
-    
-  render() {
+  state = {
+    name: '',
+  };
+
+  handleChange = e => {
+    const { value } = e.target;
+    this.setState({ name: value.toLowerCase() });
+  };
+
+  handleSubmit = e => {
+    const name = this.state.name;
+    e.preventDefault();
+    if (name.trim() === '') {
+      alert('Please enter name for search');
+      return;
+    }
+    this.props.onSubmit(name);
+     this.setState({ name: '' });
+  };
+
+    render() {
     return (
       <header className={css.searchbar}>
         <form className={css.form} onSubmit={this.props.onSubmit}>
