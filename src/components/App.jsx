@@ -70,6 +70,7 @@ class App extends React.Component {
         <Searchbar onSubmit={this.handleSubmit} />
         <ImageGallery imageGalleryItems={this.state.images} />
         {this.state.isLoading && <Loader />}
+        {/* <Loader/> */}
         {this.state.isShowLoadMore && <Button onClick={this.handleLoadMore} />}
         <ToastContainer
           position="top-right"
