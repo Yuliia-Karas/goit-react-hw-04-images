@@ -8,6 +8,8 @@ class Searchbar extends React.Component {
 
   handleChange = e => {
     const { value } = e.target;
+    console.log(value);
+
     this.setState({ name: value.toLowerCase() });
   };
 
@@ -19,13 +21,13 @@ class Searchbar extends React.Component {
       return;
     }
     this.props.onSubmit(name);
-     this.setState({ name: '' });
+    //this.setState({ name: '' });
   };
 
-    render() {
+  render() {
     return (
       <header className={css.searchbar}>
-        <form className={css.form} onSubmit={this.props.onSubmit}>
+        <form className={css.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.button}>
             <span className={css['button-label']}>Search</span>
           </button>
@@ -36,6 +38,8 @@ class Searchbar extends React.Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
+            value={this.state.name}
+            onChange={this.handleChange}
           />
         </form>
       </header>

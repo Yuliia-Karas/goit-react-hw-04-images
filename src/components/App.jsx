@@ -1,12 +1,12 @@
 import React from 'react';
 import Searchbar from './Searchbar/Searchbar';
-import { pixabayApi } from './static/Api'
+import { pixabayApi } from './api/Api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import ImageGallery from './ImageGallery/ImageGallery';
+import Button from './Button/Button';
 
 class App extends React.Component {
-  
   state = {
     name: '',
     images: null,
@@ -15,9 +15,9 @@ class App extends React.Component {
     isLoading: false,
     isShowButton: false,
     error: null,
-  }
+  };
 
-   async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     const { name, page } = this.state;
     const prevPage = prevState.page;
     const prevName = prevState.name;
@@ -34,7 +34,7 @@ class App extends React.Component {
           this.setState({ isLoading: false, isShowLoadMore: false });
           return;
         } else {
-          this.setState(prevState => ({
+          this.setState(prev => ({
             images: page === 1 ? hits : [...prevImages, ...hits],
             isShowLoadMore: page < Math.ceil(totalHits / 12),
           }));
@@ -48,22 +48,25 @@ class App extends React.Component {
   }
 
   handleSubmit = name => {
-    name.preventDefault();
-    this.setState({ name, page: 1, images: null });
+    //console.log(name);
+    //debugger
+    //name.preventDefault();
+    this.setState({ page: 1, images: null , name});
+    
   };
 
   handleLoadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
-
   render() {
-    
     return (
       <div>
         <div>I am App</div>
-
         <Searchbar onSubmit={this.handleSubmit} />
+        <ImageGallery imageGalleryItems={this.state.images} />
+        <Button onClick={this.handleLoadMore} />
+
         <ToastContainer
           position="top-right"
           autoClose={3000}

@@ -10,3 +10,4 @@ export const pixabayApi = async (name, page) => {
   const data = response.data;
   return data;
 };
+
