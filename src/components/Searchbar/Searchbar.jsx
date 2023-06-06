@@ -1,5 +1,7 @@
 import React from 'react';
 import css from './Searchbar.module.css';
+import { toast } from 'react-toastify';
+
 
 class Searchbar extends React.Component {
   state = {
@@ -8,7 +10,7 @@ class Searchbar extends React.Component {
 
   handleChange = e => {
     const { value } = e.target;
-    console.log(value);
+    // console.log(value);
 
     this.setState({ name: value.toLowerCase() });
   };
@@ -17,7 +19,7 @@ class Searchbar extends React.Component {
     const name = this.state.name;
     e.preventDefault();
     if (name.trim() === '') {
-      alert('Please enter name for search');
+      toast.warn('Please enter name for search');
       return;
     }
     this.props.onSubmit(name);

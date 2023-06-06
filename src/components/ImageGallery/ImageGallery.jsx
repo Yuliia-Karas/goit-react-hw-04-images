@@ -1,10 +1,11 @@
 import React from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
+import css from './ImageGallery.module.css';
 
 const ImageGallery = ({ imageGalleryItems }) => {
   if (imageGalleryItems)
     return (
-      <ul>
+      <ul className={css.imageGallery}>
         {imageGalleryItems.map(imageGalleryItem => {
           return (
             <ImageGalleryItem

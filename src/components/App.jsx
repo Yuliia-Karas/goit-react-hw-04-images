@@ -13,12 +13,13 @@ class App extends React.Component {
     data: [],
     page: 1,
     isLoading: false,
-    isShowButton: false,
+    isShowLoadMore: false,
     error: null,
+    perPage: 12,
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { name, page } = this.state;
+    const { name, page, perPage } = this.state;
     const prevPage = prevState.page;
     const prevName = prevState.name;
     const prevImages = prevState.images;
@@ -27,7 +28,7 @@ class App extends React.Component {
       try {
         this.setState({ isLoading: true });
 
-        const { totalHits, hits } = await pixabayApi(name, page);
+        const { totalHits, hits } = await pixabayApi(name, page, perPage);
 
         if (totalHits === 0) {
           toast.error(`Sorry, there are no pictures on request ${name}`);
@@ -36,7 +37,7 @@ class App extends React.Component {
         } else {
           this.setState(prev => ({
             images: page === 1 ? hits : [...prevImages, ...hits],
-            isShowLoadMore: page < Math.ceil(totalHits / 12),
+            isShowLoadMore: page < Math.ceil(totalHits / perPage),
           }));
 
           this.setState({ isLoading: false });
@@ -48,11 +49,7 @@ class App extends React.Component {
   }
 
   handleSubmit = name => {
-    //console.log(name);
-    //debugger
-    //name.preventDefault();
-    this.setState({ page: 1, images: null , name});
-    
+    this.setState({ page: 1, images: null, name });
   };
 
   handleLoadMore = () => {
@@ -61,12 +58,14 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div  style={{display: "grid", 
+            gridTemplateColumns: "1fr",
+            gridGap: "16px",
+            paddingBottom: "24px", } }>
         <div>I am App</div>
         <Searchbar onSubmit={this.handleSubmit} />
         <ImageGallery imageGalleryItems={this.state.images} />
-        <Button onClick={this.handleLoadMore} />
-
+        {this.state.isShowLoadMore && <Button onClick={this.handleLoadMore} />}
         <ToastContainer
           position="top-right"
           autoClose={3000}
