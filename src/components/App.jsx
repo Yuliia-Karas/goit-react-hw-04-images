@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
+import Loader from './Loader/Loader';
 
 class App extends React.Component {
   state = {
@@ -58,13 +59,17 @@ class App extends React.Component {
 
   render() {
     return (
-      <div  style={{display: "grid", 
-            gridTemplateColumns: "1fr",
-            gridGap: "16px",
-            paddingBottom: "24px", } }>
-        <div>I am App</div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr',
+          gridGap: '16px',
+          paddingBottom: '24px',
+        }}
+      >
         <Searchbar onSubmit={this.handleSubmit} />
         <ImageGallery imageGalleryItems={this.state.images} />
+        {this.state.isLoading && <Loader />}
         {this.state.isShowLoadMore && <Button onClick={this.handleLoadMore} />}
         <ToastContainer
           position="top-right"

@@ -1,10 +1,8 @@
 import React from 'react';
 import * as basicLightbox from 'basiclightbox';
-import 'basiclightbox/dist/basicLightbox.min.css'; 
-
+import 'basiclightbox/dist/basicLightbox.min.css';
 import css from './ImageGalleryItem.module.css';
-
-
+import PropTypes from 'prop-types';
 
 class ImageGalleryItem extends React.Component {
   render() {
@@ -12,13 +10,9 @@ class ImageGalleryItem extends React.Component {
     return (
       <li className={css.imageGalleryItem} key={id}>
         <img
-          
-          
           className={css['imageGalleryItem-image']}
           src={webformatURL}
           alt={tags}
-          
-
           onClick={() => {
             basicLightbox
               .create(
@@ -32,5 +26,12 @@ class ImageGalleryItem extends React.Component {
     );
   }
 }
+
+ImageGalleryItem.propTypes = {
+  id: PropTypes.number,
+  webformatURL: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+};
 
 export default ImageGalleryItem;

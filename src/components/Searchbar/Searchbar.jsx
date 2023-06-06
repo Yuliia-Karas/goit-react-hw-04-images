@@ -1,7 +1,7 @@
 import React from 'react';
 import css from './Searchbar.module.css';
 import { toast } from 'react-toastify';
-
+import PropTypes from 'prop-types';
 
 class Searchbar extends React.Component {
   state = {
@@ -10,7 +10,6 @@ class Searchbar extends React.Component {
 
   handleChange = e => {
     const { value } = e.target;
-    // console.log(value);
 
     this.setState({ name: value.toLowerCase() });
   };
@@ -23,7 +22,6 @@ class Searchbar extends React.Component {
       return;
     }
     this.props.onSubmit(name);
-    //this.setState({ name: '' });
   };
 
   render() {
@@ -48,5 +46,9 @@ class Searchbar extends React.Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Searchbar;
