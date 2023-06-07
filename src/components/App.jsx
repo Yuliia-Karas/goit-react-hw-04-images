@@ -67,7 +67,6 @@ class App extends React.Component {
           paddingBottom: '24px',
         }}
       >
-        {/* <p>v1</p> */}
         <Searchbar onSubmit={this.handleSubmit} />
         {!this.state.name && (
           <div
@@ -81,7 +80,6 @@ class App extends React.Component {
         )}
         <ImageGallery imageGalleryItems={this.state.images} />
         {this.state.isLoading && <Loader />}
-        {/* <Loader/> */}
         {this.state.isShowLoadMore && <Button onClick={this.handleLoadMore} />}
         <ToastContainer
           position="top-right"

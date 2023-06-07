@@ -18,7 +18,7 @@ class Searchbar extends React.Component {
     const name = this.state.name;
     e.preventDefault();
     if (name.trim() === '') {
-      toast.warn('Please enter name for search');
+      toast.warn('Please enter text for search');
       return;
     }
     this.props.onSubmit(name);

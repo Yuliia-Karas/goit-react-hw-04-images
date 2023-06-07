@@ -12,9 +12,6 @@ const ImageGallery = ({ imageGalleryItems }) => {
             <ImageGalleryItem
               key={imageGalleryItem.id}
               imageGalleryItem={imageGalleryItem}
-              // webformatURL={imageGalleryItem.webformatURL}
-              // largeImageURL={imageGalleryItem.largeImageURL}
-              // tags={imageGalleryItem.tags}
             />
           );
         })}
@@ -32,4 +29,5 @@ ImageGallery.propTypes = {
     })
   ),
 };
+
 export default ImageGallery;

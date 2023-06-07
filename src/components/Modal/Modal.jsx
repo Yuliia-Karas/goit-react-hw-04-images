@@ -1,5 +1,5 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
 class Modal extends React.Component {
@@ -16,12 +16,13 @@ class Modal extends React.Component {
       this.props.onClose();
     }
   };
-  handleCloseClick = () => {
-    this.props.onClose();
+  handleCloseClick = ({ target, currentTarget }) => {
+    if (currentTarget === target) {
+      this.props.onClose();
+    }
   };
 
   render() {
-    // debugger;
     return (
       <div className={css.overlay} onClick={this.handleCloseClick}>
         <div className={css.modal}>
@@ -32,10 +33,10 @@ class Modal extends React.Component {
   }
 }
 
-// Modal.propTypes = {
-//   src: PropTypes.string.isRequired,
-//   alt: PropTypes.string.isRequired,
-//   onClose: PropTypes.func.isRequired,
-// };
+Modal.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Modal;

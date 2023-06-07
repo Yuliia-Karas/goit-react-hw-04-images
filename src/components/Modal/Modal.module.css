@@ -1,4 +1,4 @@
- .overlay {
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,4 +13,5 @@
 
 .modal {
   max-width: calc(100vw - 48px);
-  max-height: calc(100vh - 24px);}
+  max-height: calc(100vh - 24px);
+}
