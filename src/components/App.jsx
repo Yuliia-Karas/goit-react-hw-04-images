@@ -67,7 +67,18 @@ class App extends React.Component {
           paddingBottom: '24px',
         }}
       >
+        {/* <p>v1</p> */}
         <Searchbar onSubmit={this.handleSubmit} />
+        {!this.state.name && (
+          <div
+            style={{
+              textAlign: 'center',
+              color: 'GrayText',
+            }}
+          >
+            enter text for search
+          </div>
+        )}
         <ImageGallery imageGalleryItems={this.state.images} />
         {this.state.isLoading && <Loader />}
         {/* <Loader/> */}
