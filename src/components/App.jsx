@@ -34,7 +34,6 @@ class App extends React.Component {
         if (totalHits === 0) {
           toast.error(`Sorry, there are no pictures on request ${name}`);
           this.setState({ isLoading: false, isShowLoadMore: false });
-          return;
         } else {
           this.setState(prev => ({
             images: page === 1 ? hits : [...prevImages, ...hits],

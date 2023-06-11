@@ -14,7 +14,7 @@ class ImageGalleryItem extends React.Component {
 
   render() {
     const { id, webformatURL, largeImageURL, tags } =
-      this.props.imageGalleryItem;
+      this.props;
     return (
       <>
         <li

@@ -11,7 +11,10 @@ const ImageGallery = ({ imageGalleryItems }) => {
           return (
             <ImageGalleryItem
               key={imageGalleryItem.id}
-              imageGalleryItem={imageGalleryItem}
+              id={imageGalleryItem.id}
+              webformatURL={imageGalleryItem.webformatURL}
+              largeImageURL={imageGalleryItem.largeImageURL}
+              tags={imageGalleryItem.tags}
             />
           );
         })}
