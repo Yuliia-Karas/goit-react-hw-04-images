@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import { pixabayApi } from './api/Api';
 import { ToastContainer, toast } from 'react-toastify';
@@ -6,17 +6,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Loader from './Loader/Loader';
+import css from './App.module.css';
 
-export default function App () {
-  const [name, setName] = useState ('');
- const [images, setImages] = useState (null);
-  const [data, setData] = useState ([]);
+const App = () => {
+  const [name, setName] = useState('');
+  const [images, setImages] = useState(null);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-    const [isShowLoadMore, setIsShowLoadMore] = useState(false);
-    const [error, setError] = useState(null);
-   const [perPage, setPerPage] = useState(12);
-   
+  const [isShowLoadMore, setIsShowLoadMore] = useState(false);
+  // const [error, setError] = useState(null);
+  const perPage = 12;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,7 +29,9 @@ export default function App () {
           setIsLoading(false);
           setIsShowLoadMore(false);
         } else {
-          setImages((prevImages) => (page === 1 ? hits : [...prevImages, ...hits]));
+          setImages(prevImages =>
+            page === 1 ? hits : [...prevImages, ...hits]
+          );
           setIsShowLoadMore(page < Math.ceil(totalHits / perPage));
           setIsLoading(false);
         }
@@ -37,59 +39,51 @@ export default function App () {
         toast.error(`${error}`);
       }
     };
-    fetchData();
+
+    if (name !== '' || page !== 1) {
+      fetchData();
+    }
   }, [name, page, perPage]);
- 
-  
-  const handleSubmit = name => {
-    setName(name);
+
+  const handleSubmit = newName => {
     setPage(1);
     setImages(null);
+    setName(newName);
   };
 
   const handleLoadMore = () => {
     setPage(prevPage => prevPage + 1);
   };
 
-  
-    return (
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr',
-          gridGap: '16px',
-          paddingBottom: '24px',
-        }}
-      >
-        <Searchbar onSubmit={handleSubmit} />
-        {!name && (
-          <div
-            style={{
-              textAlign: 'center',
-              color: 'GrayText',
-            }}
-          >
-            enter text for search
-          </div>
-        )}
-        <ImageGallery imageGalleryItems={images} />
-        {isLoading && <Loader />}
-        {isShowLoadMore && <Button onClick={handleLoadMore} />}
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-      </div>
-    );
-  
-}
+  return (
+    <div className= {css.App}
+     
+    >
+      <Searchbar onSubmit={handleSubmit} />
+      {!name && (
+        <div className={css.text}
+          
+        >
+          enter text for search
+        </div>
+      )}
+      <ImageGallery imageGalleryItems={images} />
+      {isLoading && <Loader />}
+      {isShowLoadMore && <Button onClick={handleLoadMore} />}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </div>
+  );
+};
 
-
+export default App;
