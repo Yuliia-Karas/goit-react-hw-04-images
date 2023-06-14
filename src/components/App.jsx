@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import { pixabayApi } from './api/Api';
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,56 +7,51 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Loader from './Loader/Loader';
 
-class App extends React.Component {
-  state = {
-    name: '',
-    images: null,
-    data: [],
-    page: 1,
-    isLoading: false,
-    isShowLoadMore: false,
-    error: null,
-    perPage: 12,
-  };
-
-  async componentDidUpdate(prevProps, prevState) {
-    const { name, page, perPage } = this.state;
-    const prevPage = prevState.page;
-    const prevName = prevState.name;
-    const prevImages = prevState.images;
-
-    if (prevName !== name || prevPage !== page) {
+export default function App () {
+  const [name, setName] = useState ('');
+ const [images, setImages] = useState (null);
+  const [data, setData] = useState ([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+    const [isShowLoadMore, setIsShowLoadMore] = useState(false);
+    const [error, setError] = useState(null);
+   const [perPage, setPerPage] = useState(12);
+   
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        this.setState({ isLoading: true });
+        setIsLoading(true);
 
         const { totalHits, hits } = await pixabayApi(name, page, perPage);
 
         if (totalHits === 0) {
           toast.error(`Sorry, there are no pictures on request ${name}`);
-          this.setState({ isLoading: false, isShowLoadMore: false });
+          setIsLoading(false);
+          setIsShowLoadMore(false);
         } else {
-          this.setState(prev => ({
-            images: page === 1 ? hits : [...prevImages, ...hits],
-            isShowLoadMore: page < Math.ceil(totalHits / perPage),
-          }));
-
-          this.setState({ isLoading: false });
+          setImages((prevImages) => (page === 1 ? hits : [...prevImages, ...hits]));
+          setIsShowLoadMore(page < Math.ceil(totalHits / perPage));
+          setIsLoading(false);
         }
       } catch (error) {
         toast.error(`${error}`);
       }
-    }
-  }
-
-  handleSubmit = name => {
-    this.setState({ page: 1, images: null, name });
+    };
+    fetchData();
+  }, [name, page, perPage]);
+ 
+  
+  const handleSubmit = name => {
+    setName(name);
+    setPage(1);
+    setImages(null);
   };
 
-  handleLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
-  render() {
+  
     return (
       <div
         style={{
@@ -66,8 +61,8 @@ class App extends React.Component {
           paddingBottom: '24px',
         }}
       >
-        <Searchbar onSubmit={this.handleSubmit} />
-        {!this.state.name && (
+        <Searchbar onSubmit={handleSubmit} />
+        {!name && (
           <div
             style={{
               textAlign: 'center',
@@ -77,9 +72,9 @@ class App extends React.Component {
             enter text for search
           </div>
         )}
-        <ImageGallery imageGalleryItems={this.state.images} />
-        {this.state.isLoading && <Loader />}
-        {this.state.isShowLoadMore && <Button onClick={this.handleLoadMore} />}
+        <ImageGallery imageGalleryItems={images} />
+        {isLoading && <Loader />}
+        {isShowLoadMore && <Button onClick={handleLoadMore} />}
         <ToastContainer
           position="top-right"
           autoClose={3000}
@@ -94,7 +89,7 @@ class App extends React.Component {
         />
       </div>
     );
-  }
+  
 }
 
-export default App;
+

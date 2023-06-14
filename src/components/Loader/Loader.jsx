@@ -2,8 +2,8 @@ import React from 'react';
 import { Dna } from 'react-loader-spinner';
 import css from './Loader.module.css';
 
-class Loader extends React.Component {
-  render() {
+export default function Loader () {
+ 
     return (
       <div className={css.loader}>
         <Dna
@@ -16,7 +16,7 @@ class Loader extends React.Component {
         />{' '}
       </div>
     );
-  }
+  
 }
 
-export default Loader;
+
